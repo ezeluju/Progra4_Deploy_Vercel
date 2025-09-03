@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Reseñas de Libros
 
-## Getting Started
+Aplicación de reseñas de libros construida con [Next.js](https://nextjs.org).
 
-First, run the development server:
+## URL pública
 
+https://progra4-deploy-vercel.vercel.app
+
+## Variables de entorno
+
+| Variable | Descripción | Valor por defecto |
+|----------|-------------|-------------------|
+| `PORT` | Puerto utilizado por el servidor (Docker o `npm start`) | `3000` |
+
+No se requieren otras variables de entorno.
+
+## Ejecutar localmente
+
+1. Instalar dependencias:
+   ```bash
+   npm install
+   ```
+2. Levantar el entorno de desarrollo:
+   ```bash
+   npm run dev
+   ```
+3. Abrir [http://localhost:3000](http://localhost:3000)
+
+Para ejecutar las pruebas:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Ejecutar con Docker
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+docker build -t resenas-libros .
+docker run -p 3000:3000 resenas-libros
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+La aplicación quedará disponible en `http://localhost:3000`.
 
-## Learn More
+## Workflows de GitHub Actions
 
-To learn more about Next.js, take a look at the following resources:
+- **Test** (`.github/workflows/test.yml`): ejecuta `npm test` en cada pull request.
+- **Build** (`.github/workflows/build.yml`): instala dependencias, ejecuta pruebas y compila la aplicación en las pull requests.
+- **Docker** (`.github/workflows/docker.yml`): al hacer push a `main` construye y publica una imagen en GitHub Container Registry.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
