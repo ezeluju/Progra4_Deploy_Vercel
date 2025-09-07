@@ -2,6 +2,8 @@
 
 Aplicación de reseñas de libros construida con [Next.js](https://nextjs.org).
 
+Ahora incluye autenticación con JWT y persistencia de reseñas en una base de datos **MongoDB**.
+
 ## URL pública
 
 https://progra4-deploy-vercel.vercel.app
@@ -12,7 +14,8 @@ https://progra4-deploy-vercel.vercel.app
 |----------|-------------|-------------------|
 | `PORT` | Puerto utilizado por el servidor (Docker o `npm start`) | `3000` |
 
-No se requieren otras variables de entorno.
+| `MONGODB_URI` | Cadena de conexión a MongoDB | - |
+| `JWT_SECRET` | Secreto utilizado para firmar tokens JWT | - |
 
 ## Ejecutar localmente
 

@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import mongoose from 'mongoose'
 
 describe('reviewsStore', () => {
   let addReview: any
@@ -46,5 +47,8 @@ describe('reviewsStore', () => {
     expect(scoreMock).toHaveBeenCalledWith(1, 0)
     expect(updated.score).toBe(0.42)
   })
-})
 
+  afterAll(async () => {
+    await mongoose.disconnect()
+  })
+})
