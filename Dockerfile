@@ -2,6 +2,10 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
+# Build arguments
+ARG MONGODB_URI
+ENV MONGODB_URI=$MONGODB_URI
+
 # Install dependencies
 COPY package.json package-lock.json ./
 RUN npm ci

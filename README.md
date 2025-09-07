@@ -37,7 +37,7 @@ npm test
 ## Ejecutar con Docker
 
 ```bash
-docker build -t resenas-libros .
+docker build --build-arg MONGODB_URI=<your_mongodb_uri> -
 docker run -p 3000:3000 resenas-libros
 ```
 
