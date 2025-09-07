@@ -18,3 +18,13 @@ export function signToken(payload: any) {
 export function verifyToken<T = any>(token: string): T {
   return jwt.verify(token, JWT_SECRET) as T
 }
+
+export function requireUser<T = any>(req: Request): T {
+  const token = req.headers.get('authorization')?.split(' ')[1]
+  if (!token) throw new Error('auth required')
+  try {
+    return verifyToken<T>(token)
+  } catch {
+    throw new Error('invalid token')
+  }
+}
