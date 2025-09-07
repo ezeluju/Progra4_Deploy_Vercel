@@ -1,6 +1,7 @@
 // src/components/ReviewList.tsx
 'use client'
 import { useEffect, useState } from 'react'
+import { authHeader } from '@/lib/session'
 
 type Review = {
   id: string
@@ -22,26 +23,43 @@ export default function ReviewList({
 }) {
   const [items, setItems] = useState<Review[]>([])
   const [sort, setSort] = useState<'best' | 'new' | 'rating'>('best')
+    const [error, setError] = useState('')
 
   async function load() {
-    const res = await fetch(`/api/books/${bookId}/reviews?sort=${sort}`, { cache: 'no-store' })
+    const res = await fetch(`/api/books/${bookId}/reviews?sort=${sort}`, {
+      cache: 'no-store',
+      headers: authHeader(),
+    })
+    if (res.status === 401) {
+      setError('Iniciá sesión para ver las reseñas')
+      setItems([])
+      return
+    }
     const data = await res.json()
     setItems(data.items ?? [])
+    setError('')
   }
 
   useEffect(() => { load() }, [sort, refreshKey])
 
   async function vote(id: string, value: 1 | -1) {
-    await fetch(`/api/reviews/${id}/vote`, {
+    const res = await fetch(`/api/reviews/${id}/vote`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...authHeader() },
       body: JSON.stringify({ value }),
     })
+
+    if (res.status === 401) {
+      setError('Iniciá sesión para votar')
+      return
+    }
+
     await load()
   }
 
   return (
     <div className="space-y-3">
+      {error && <div className="text-red-500 text-sm">{error}</div>}
       <div className="flex items-center gap-2">
         <span className="text-sm text-gray-500">Ordenar:</span>
         <select value={sort} onChange={e=>setSort(e.target.value as any)} className="border rounded p-1">
