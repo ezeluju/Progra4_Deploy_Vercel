@@ -3,9 +3,11 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { authHeader, clearToken, getToken } from '@/lib/session'
+import { useRouter } from 'next/navigation'
 
 export default function NavBar() {
-    const [token, setToken] = useState<string | null>(null)
+  const router = useRouter()
+  const [token, setToken] = useState<string | null>(null)
 
   useEffect(() => {
     async function verify() {
@@ -28,7 +30,19 @@ export default function NavBar() {
         <Link href="/">Inicio</Link>
         <Link href="/favorites">Favoritos</Link>
         {token ? (
-          <Link href="/profile">Perfil</Link>
+          <>
+            <Link href="/profile">Perfil</Link>
+            <button
+              onClick={() => {
+                clearToken()
+                setToken(null)
+                router.push('/')
+              }}
+              className="text-red-600"
+            >
+              Cerrar sesión
+            </button>
+          </>
         ) : (
           <>
             <Link href="/auth/login">Iniciar sesión</Link>

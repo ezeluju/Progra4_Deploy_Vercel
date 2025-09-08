@@ -32,7 +32,7 @@ export default function ProfilePage() {
   if (!user) return <div className="p-6">Redirigiendo…</div>
 
   return (
-    <main className="max-w-md mx-auto p-6 space-y-4">
+    <main className="max-w-md p-6 space-y-4 ml-4">
       <h1 className="text-2xl font-bold">Perfil</h1>
       {user.name && <p>Nombre: {user.name}</p>}
       {user.email && <p>Email: {user.email}</p>}

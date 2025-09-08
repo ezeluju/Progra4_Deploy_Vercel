@@ -5,7 +5,8 @@ import { authHeader } from '@/lib/session'
 
 type Review = {
   id: string
-  user: { id: string; name: string }
+  userId: string
+  userName: string
   rating: number
   content: string
   upVotes: number
@@ -36,7 +37,18 @@ export default function ReviewList({
       return
     }
     const data = await res.json()
-    setItems(data.items ?? [])
+    const list = (data.items ?? []).map((r: any) => ({
+      id: r._id || r.id,
+      userId: r.userId,
+      userName: r.userName,
+      rating: r.rating,
+      content: r.content,
+      upVotes: r.upVotes,
+      downVotes: r.downVotes,
+      score: r.score,
+      createdAt: r.createdAt,
+    }))
+    setItems(list)
     setError('')
   }
 
@@ -74,7 +86,7 @@ export default function ReviewList({
       {items.map(r => (
         <div key={r.id} className="border rounded-xl p-4">
           <div className="flex items-center justify-between">
-            <div className="font-medium">{r.user.name}</div>
+            <div className="font-medium">{r.userName}</div>
             <div className="text-yellow-500">{'★'.repeat(r.rating)}{'☆'.repeat(5-r.rating)}</div>
           </div>
           <p className="mt-2 whitespace-pre-wrap">{r.content}</p>
