@@ -37,7 +37,9 @@ export default function NavBar() {
           <Link href="/favorites">Favoritos</Link>
           {token && <Link href="/reviews">Mis reseñas</Link>}
           {token && <Link href="/profile">Perfil</Link>}
-          {token && (
+        </div>
+        <div className="flex gap-4">
+          {token ? (
             <button
               onClick={() => {
                 clearToken()
@@ -48,14 +50,13 @@ export default function NavBar() {
             >
               Cerrar sesión
             </button>
+          ) : (
+            <>
+              <Link href="/auth/login">Iniciar sesión</Link>
+              <Link href="/auth/register">Registrarse</Link>
+            </>
           )}
         </div>
-        {!token && (
-          <div className="flex gap-4">
-            <Link href="/auth/login">Iniciar sesión</Link>
-            <Link href="/auth/register">Registrarse</Link>
-          </div>
-        )}
       </div>
     </nav>
   )
