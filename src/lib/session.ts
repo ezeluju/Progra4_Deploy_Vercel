@@ -9,4 +9,11 @@ export function getToken(): string | null {
 export function authHeader(): HeadersInit {
   const token = getToken()
   return token ? { Authorization: `Bearer ${token}` } : {}
+  }
+
+export function clearToken(): void {
+  if (typeof window !== 'undefined') {
+    window.localStorage.removeItem('token')
+    document.cookie = 'token=; max-age=0'
+  }
 }

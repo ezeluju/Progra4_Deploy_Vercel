@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { authHeader } from '@/lib/session'
+import { authHeader, clearToken, getToken } from '@/lib/session'
 
 interface Book {
   id: string
@@ -16,7 +16,7 @@ export default function FavoritesPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
+    const token = getToken()
     if (!token) {
       router.replace('/auth/login')
       return
@@ -34,6 +34,10 @@ export default function FavoritesPage() {
           })
         )
         setBooks(items.filter(Boolean))
+      } else if (res.status === 401) {
+        clearToken()
+        router.replace('/auth/login')
+        return
       }
       setLoading(false)
     }
