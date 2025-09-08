@@ -59,5 +59,7 @@ export type BookResult = {
       pageCount: v.pageCount,
       categories: v.categories ?? [],
       publishedDate: v.publishedDate,
+      publisher: v.publisher,
+      language: v.language,
     }
   }
