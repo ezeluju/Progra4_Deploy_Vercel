@@ -16,6 +16,7 @@ https://progra4-deploy-vercel.vercel.app
 
 | `MONGODB_URI` | Cadena de conexión a MongoDB | - |
 | `JWT_SECRET` | Secreto utilizado para firmar tokens JWT | - |
+| `GOOGLE_BOOKS_API_KEY` | Clave de API de Google Books | - |
 
 ## Ejecutar localmente
 

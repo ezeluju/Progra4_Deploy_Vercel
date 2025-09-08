@@ -41,5 +41,17 @@ describe('googleBooks api', () => {
     const book = await getBookById('a')
     expect(book).toMatchObject({ id: 'a', title: 'T', authors: ['A'], categories: [], thumbnail: 'x' })
   })
+
+    it('includes API key when configured', async () => {
+    const oldKey = process.env.GOOGLE_BOOKS_API_KEY
+    process.env.GOOGLE_BOOKS_API_KEY = 'test-key'
+    mockFetch.mockResolvedValueOnce({ ok: true, json: async () => ({ items: [] }) })
+    await searchBooks('foo')
+    expect(mockFetch.mock.calls[0][0]).toContain('&key=test-key')
+    mockFetch.mockResolvedValueOnce({ ok: true, json: async () => ({ id: '1', volumeInfo: {} }) })
+    await getBookById('1')
+    expect(mockFetch.mock.calls[1][0]).toContain('?key=test-key')
+    process.env.GOOGLE_BOOKS_API_KEY = oldKey
+  })
 })
 
