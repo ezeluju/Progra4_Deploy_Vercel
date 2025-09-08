@@ -8,6 +8,7 @@ import { authHeader, clearToken, getToken } from '@/lib/session'
 interface Book {
   id: string
   title: string
+  thumbnail?: string
 }
 
 export default function FavoritesPage() {
@@ -47,15 +48,24 @@ export default function FavoritesPage() {
   if (loading) return <div className="p-6">Cargando…</div>
 
   return (
-    <main className="max-w-3xl mx-auto p-6 space-y-4">
+    <main className="max-w-3xl p-6 space-y-4">
       <h1 className="text-2xl font-bold">Mis favoritos</h1>
       {books.length === 0 ? (
         <p>No tenés libros favoritos.</p>
       ) : (
-        <ul className="space-y-2">
+        <ul className="space-y-4">
           {books.map(b => (
-            <li key={b.id}>
-              <Link href={`/book/${b.id}`} className="text-blue-600">{b.title}</Link>
+            <li key={b.id} className="flex items-center gap-4">
+              {b.thumbnail && (
+                <img
+                  src={b.thumbnail}
+                  alt={b.title}
+                  className="w-12 h-auto rounded shadow"
+                />
+              )}
+              <Link href={`/book/${b.id}`} className="text-blue-600">
+                {b.title}
+              </Link>
             </li>
           ))}
         </ul>

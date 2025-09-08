@@ -3,12 +3,10 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { authHeader, clearToken, getToken } from '@/lib/session'
-import Link from 'next/link'
 
 export default function ProfilePage() {
   const router = useRouter()
-  const [token, setToken] = useState<string | null>(null)
-    const [user, setUser] = useState<{ id: string; email?: string; name?: string } | null>(null)
+  const [user, setUser] = useState<{ id: string; email?: string; name?: string } | null>(null)
 
   useEffect(() => {
     async function load() {
@@ -20,7 +18,6 @@ export default function ProfilePage() {
       const res = await fetch('/api/users/me', { headers: authHeader() })
       if (res.ok) {
         const data = await res.json()
-        setToken(t)
         setUser(data.user)
       } else {
         clearToken()
@@ -37,8 +34,6 @@ export default function ProfilePage() {
       <h1 className="text-2xl font-bold">Perfil</h1>
       {user.name && <p>Nombre: {user.name}</p>}
       {user.email && <p>Email: {user.email}</p>}
-      <p>Token almacenado:</p>
-      <pre className="bg-gray-100 p-3 rounded break-all">{token}</pre>
     </main>
   )
 }
