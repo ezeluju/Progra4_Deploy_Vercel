@@ -1,0 +1,61 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { authHeader } from '@/lib/session'
+
+interface Book {
+  id: string
+  title: string
+}
+
+export default function FavoritesPage() {
+  const router = useRouter()
+  const [books, setBooks] = useState<Book[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      router.replace('/auth/login')
+      return
+    }
+    async function load() {
+      const res = await fetch('/api/users/me', { headers: authHeader() })
+      if (res.ok) {
+        const data = await res.json()
+        const ids: string[] = data.user.favorites || []
+        const items = await Promise.all(
+          ids.map(async (id: string) => {
+            const r = await fetch(`/api/books/${id}`)
+            if (!r.ok) return null
+            return r.json()
+          })
+        )
+        setBooks(items.filter(Boolean))
+      }
+      setLoading(false)
+    }
+    load()
+  }, [router])
+
+  if (loading) return <div className="p-6">Cargando…</div>
+
+  return (
+    <main className="max-w-3xl mx-auto p-6 space-y-4">
+      <h1 className="text-2xl font-bold">Mis favoritos</h1>
+      {books.length === 0 ? (
+        <p>No tenés libros favoritos.</p>
+      ) : (
+        <ul className="space-y-2">
+          {books.map(b => (
+            <li key={b.id}>
+              <Link href={`/book/${b.id}`} className="text-blue-600">{b.title}</Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </main>
+  )
+}

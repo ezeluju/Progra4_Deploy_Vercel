@@ -1,6 +1,7 @@
 // src/app/book/[id]/page.tsx
 import { headers } from 'next/headers'
 import BookReviews from '@/components/BookReviews'
+import FavoriteButton from '@/components/FavoriteButton'
 
 async function getBaseUrl() {
   const h = await headers()
@@ -50,6 +51,7 @@ export default async function BookPage({ params }: PageCtx) {
         </article>
       )}
 
+      <FavoriteButton bookId={book.id} />
       {/* wrapper cliente que orquesta formulario + lista */}
       <BookReviews bookId={book.id} />
     </main>
