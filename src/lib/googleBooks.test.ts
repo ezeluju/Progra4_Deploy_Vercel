@@ -8,7 +8,7 @@ describe('googleBooks api', () => {
   beforeEach(() => {
     mockFetch.mockReset()
   })
-|
+
   it('searchBooks maps results', async () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
@@ -36,10 +36,10 @@ describe('googleBooks api', () => {
   it('getBookById maps volume info', async () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
-      json: async () => ({ id: 'a', volumeInfo: { title: 'T', authors: ['A'] } }),
+      json: async () => ({ id: 'a', volumeInfo: { title: 'T', authors: ['A'], imageLinks: { thumbnail: 'x' } } }),
     })
     const book = await getBookById('a')
-    expect(book).toMatchObject({ id: 'a', title: 'T', authors: ['A'], categories: [] })
+    expect(book).toMatchObject({ id: 'a', title: 'T', authors: ['A'], categories: [], thumbnail: 'x' })
   })
 })
 

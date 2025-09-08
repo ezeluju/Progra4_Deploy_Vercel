@@ -27,11 +27,13 @@ export type BookResult = {
     if (!res.ok) return null
     const it = await res.json()
     const v = it.volumeInfo ?? {}
+    const img = v.imageLinks ?? {}
     return {
       id: it.id,
       title: v.title ?? 'Untitled',
       authors: v.authors ?? [],
       description: v.description,
+      thumbnail: img.thumbnail || img.smallThumbnail,
       pageCount: v.pageCount,
       categories: v.categories ?? [],
       publishedDate: v.publishedDate,

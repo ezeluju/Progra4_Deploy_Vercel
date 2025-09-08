@@ -12,6 +12,10 @@ interface Review {
   rating: number
   content: string
   createdAt: string
+  book?: {
+    title: string
+    thumbnail?: string
+  }
 }
 
 export default function MyReviewsPage() {
@@ -27,16 +31,26 @@ export default function MyReviewsPage() {
     const res = await fetch('/api/users/me', { headers: authHeader(), cache: 'no-store' })
     if (res.ok) {
       const data = await res.json()
-      const list = (data.user.reviews ?? []).map((r: any) => ({
-        id: r._id || r.id,
-        bookId: r.bookId,
-        rating: r.rating,
-        content: r.content,
-        createdAt: r.createdAt,
-      }))
+      const list: Review[] = await Promise.all(
+        (data.user.reviews ?? []).map(async (r: any) => {
+          let book
+          try {
+            const bRes = await fetch(`/api/books/${r.bookId}`)
+            book = bRes.ok ? await bRes.json() : undefined
+          } catch {}
+          return {
+            id: r._id || r.id,
+            bookId: r.bookId,
+            rating: r.rating,
+            content: r.content,
+            createdAt: r.createdAt,
+            book,
+          }
+        })
+      )
       setReviews(list)
     } else {
-      clearToken();
+      clearToken()
       router.replace('/auth/login')
     }
   }
@@ -73,7 +87,16 @@ export default function MyReviewsPage() {
       {reviews.length === 0 && <p>No tenés reseñas.</p>}
       {reviews.map(r => (
         <div key={r.id} className="border rounded-xl p-4 space-y-2">
-          <Link href={`/book/${r.bookId}`} className="text-blue-600 underline">Ver libro</Link>
+          <Link href={`/book/${r.bookId}`} className="flex items-center gap-2">
+            {r.book?.thumbnail && (
+              <img
+                src={r.book.thumbnail}
+                alt={r.book.title}
+                className="w-12 h-16 object-cover"
+              />
+            )}
+            <span className="font-semibold">{r.book?.title ?? 'Ver libro'}</span>
+          </Link>
           {editingId === r.id ? (
             <>
               <StarRating value={editRating} onChange={setEditRating} />

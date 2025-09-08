@@ -39,7 +39,6 @@ export default function ProfilePage() {
       {user.email && <p>Email: {user.email}</p>}
       <p>Token almacenado:</p>
       <pre className="bg-gray-100 p-3 rounded break-all">{token}</pre>
-      <Link href="/profile/reviews" className="text-blue-600 underline">Mis reseñas</Link>
     </main>
   )
 }
