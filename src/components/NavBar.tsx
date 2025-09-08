@@ -12,7 +12,10 @@ export default function NavBar() {
   useEffect(() => {
     async function verify() {
       const t = getToken()
-      if (!t) return
+      if (!t) {
+        setToken(null)
+        return
+      }
       const res = await fetch('/api/users/me', { headers: authHeader() })
       if (res.ok) {
         setToken(t)
@@ -22,6 +25,8 @@ export default function NavBar() {
       }
     }
     verify()
+    window.addEventListener('token', verify)
+    return () => window.removeEventListener('token', verify)
   }, [])
 
   return (

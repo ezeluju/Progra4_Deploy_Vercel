@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { setToken } from '@/lib/session'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -23,7 +24,7 @@ export default function RegisterPage() {
       setError(data.error || 'Error al registrarse')
       return
     }
-    localStorage.setItem('token', data.token)
+   setToken (data.token)
     router.push('/profile')
   }
 

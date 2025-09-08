@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { setToken } from '@/lib/session'
+
 
 export default function LoginPage() {
   const router = useRouter()
@@ -22,7 +24,7 @@ export default function LoginPage() {
       setError(data.error || 'Error al iniciar sesión')
       return
     }
-    localStorage.setItem('token', data.token)
+    setToken (data.token)
     router.push('/profile')
   }
 
